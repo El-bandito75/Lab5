@@ -46,37 +46,17 @@ PE0                     EQU   0x40024004
         
 Start
  
-    
     BL PortE_Init; //go to PortE_Init
     BL LED_OutputON; // turn led on
-    MOV r5, #0; // counter set to 0
     
 loop   ;// dead loop
-
     BL SwitchSat_Input; //get input
     CMP r4, #0x02; // if r4(input) =0x02(on)
-	BLNE temp1;
-	BLEQ temp2;
-	
+    BLNE LED_OutputON;
+	BLEQ temp;
     BL    loop;       
-	
-temp2;
-	PUSH{LR}; // saves LR to main loop in stack
-	CMP r5, #0; is the not counter =0
-	BLNE LED_OutputOFF;
-	BLEQ temp; 
-	POP{LR}; // pops out the LR to the main loop
-	BX LR
-	
-temp1;
-	PUSH{LR}; // saves LR to main loop in stack
-	MOVNE  r5,#0; // set counter back to zero
-	BLNE LED_OutputON;
-	POP{LR}; // pops out the LR to the main loop
-	BX LR
-	
+
 temp;
-    MOV r5,#1; //set counter to one
 	PUSH{LR}; // saves LR to main loop in stack
 	BL LED_OutputON;
 	BL Delay
